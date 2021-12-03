@@ -9,7 +9,7 @@ using Nest;
 
 const string citiesIndexName = "cities";
 
-var connectionPool = new SingleNodeConnectionPool(new Uri("http://localhost:9200"));
+var connectionPool = new SingleNodeConnectionPool(new Uri("http://elasticsearch:9200"));
 var elasticClient = new ElasticClient(
     new ConnectionSettings(connectionPool)
         .DisableDirectStreaming()

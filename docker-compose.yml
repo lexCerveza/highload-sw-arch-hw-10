@@ -32,6 +32,14 @@ services:
     depends_on:
       - elasticsearch
 
+  data-seeeder:
+    container_name: data-seeder
+    restart: on-failure
+    build:
+      context: ./seed-data
+    depends_on:
+      - elasticsearch
+
 volumes:
   elasticsearch-data:
     driver: local
