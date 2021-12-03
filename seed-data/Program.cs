@@ -32,9 +32,9 @@ elasticClient.Indices.Create(
     citiesIndexName,
     c => c.Map<CityInfo>(m => m
         .Properties(ps => ps
-            .Text(s => s.Name(n => n.name))
-            .Text(s => s.Name(n => n.country))
-            .Text(s => s.Name(n => n.subcountry))
+            .Completion(s => s.Name(n => n.name))
+            .Completion(s => s.Name(n => n.country))
+            .Completion(s => s.Name(n => n.subcountry))
             .Number(s => s.Name(n => n.geoNameId).Type(NumberType.Long)))));
 
 using var streamReader = new StreamReader("cities.csv");

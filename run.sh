@@ -1,5 +1,5 @@
 #! /bin/bash
  
-docker-compose up -d
+docker-compose up --build -d
 
 echo "Elastic is up and running and data is seeded"
