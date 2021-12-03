@@ -1,12 +1,48 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
+using Elasticsearch.Net;
+using Nest;
 
-namespace Projectr.SeedElasticData
+const string citiesIndexName = "cities";
+
+var connectionPool = new SingleNodeConnectionPool(new Uri("http://localhost:9200"));
+var elasticClient = new ElasticClient(
+    new ConnectionSettings(connectionPool)
+        .DisableDirectStreaming()
+        .EnableDebugMode()
+        .DefaultMappingFor<CityInfo>(m => m.IndexName(citiesIndexName)));
+
+var csvReaderConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-        }
-    }
+    NewLine = Environment.NewLine,
+    HasHeaderRecord = false
+};
+
+if (elasticClient.Indices.Exists(citiesIndexName).Exists)
+{
+    elasticClient.Indices.Delete(citiesIndexName);
 }
+
+elasticClient.Indices.Create(
+    citiesIndexName,
+    c => c.Map<CityInfo>(m => m
+        .Properties(ps => ps
+            .Text(s => s.Name(n => n.name))
+            .Text(s => s.Name(n => n.country))
+            .Text(s => s.Name(n => n.subcountry))
+            .Number(s => s.Name(n => n.geoNameId).Type(NumberType.Long)))));
+
+using var streamReader = new StreamReader("cities.csv");
+using var csvReader = new CsvReader(streamReader, csvReaderConfig);
+
+var cities = csvReader.GetRecords<CityInfo>().ToList();
+
+elasticClient.IndexMany<CityInfo>(cities);
+
+Console.WriteLine("Data seeded successfully");
+
+public record CityInfo(string name, string country, string subcountry, long geoNameId);

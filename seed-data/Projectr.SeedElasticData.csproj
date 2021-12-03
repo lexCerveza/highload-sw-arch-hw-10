@@ -1,14 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
     <Content Include="cities.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>  
+    </Content>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="NEST" Version="7.15.2"/>
+    <PackageReference Include="CsvHelper" Version="27.2.1"/>
+  </ItemGroup>
 </Project>
