@@ -13,6 +13,7 @@ var connectionPool = new SingleNodeConnectionPool(new Uri("http://elasticsearch:
 var elasticClient = new ElasticClient(
     new ConnectionSettings(connectionPool)
         .DisableDirectStreaming()
+        .ThrowExceptions()
         .EnableDebugMode()
         .DefaultMappingFor<CityInfo>(m => m.IndexName(citiesIndexName)));
 
