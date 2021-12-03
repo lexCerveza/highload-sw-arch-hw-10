@@ -4,7 +4,7 @@
 * docker
 * linux + bash
 
-# 1. Run Elasticsearch and create index with citites
+# 1. Run Elasticsearch and create index with cities
 ```
 ./run.sh
 ```
